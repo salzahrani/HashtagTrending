@@ -1,0 +1,79 @@
+<dataConfig>
+	<dataSource name="mysql" encoding="UTF-8" type="JdbcDataSource" driver=
+"org.postgresql.Driver" url="jdbc:postgresql://127.0.0.1:5432/UKNew" user="postgres" 
+password="password" />
+	<document>
+
+		<entity name="Tweets" 
+	pk="tweetid"
+	dataSource = "mysql"
+	query="select * from tweet t">
+			<field column="tweetid" name="tweetid"/>
+			<field column="text" name="tweetcontents"/>
+			<field column="createdat" name="createdat"/>
+			<field column="geo" name="geo"/>
+			<field column="place" name="place"/>
+			<field column="retweetcount" name="retweetcount"/>
+			<field column="userid" name="useridtt"/>	
+		</entity>  
+
+		<entity name="Hashtags" 
+	pk="tweetid"
+	dataSource = "mysql"
+	query="select * from hashtags h">
+			<field column="tweetid" name="tweetidht" />
+			<field column="hashtags" name="hashtags" />
+			<field column="breaking" name="breaking" />
+		</entity>  
+
+		<entity name="Retweet" 
+	pk="tweetid"
+	dataSource = "mysql"
+	query="select * from retweet rt">
+			<field column="tweetid" name="tweetidrtt" />
+			<field column="hashtags" name="hashtags" />
+			<field column="breaking" name="breaking" />
+		</entity> 
+
+		<entity name="Url" 
+	pk="tweetid"
+	dataSource = "mysql"
+	query="select * from url u">
+			<field column="tweetid" name="tweetidut" />
+			<field column="url" name="urlHT" />
+		</entity>
+
+		<entity name="AllUsers" 
+	dataSource = "mysql"
+	query="select * from user u">
+			<field column="userid" name="userid" />
+			<field column="name" name="username" />
+			<field column="screenname" name="screenname" />
+			<field column="url" name="urluser" />
+			<field column="location" name="locationHT" />
+			<field column="language" name="languageHT" />
+		</entity>
+
+		<entity name="UserMention" 
+	dataSource = "mysql"
+	query="select * from user_mention um">
+			<field column="tweetid" name="tweetid" />
+			<field column="userid" name="useridum" />
+			<field column="screenname" name="screenname" />
+		</entity>
+		
+		<entity name="HashtagPicked" 
+	dataSource = "mysql"
+	pk="id,date"
+	query="select * from hashtag_picked hp">
+			<field column="hashtag" name="hashtag" />
+			<field column="count" name="count" />
+			<field column="mean" name="mean" />
+			<field column="sigma" name="sigma" />
+			<field column="date" name="bdate" />
+			<field column="last_modified" name="last_modified" />
+			<field column="id" name="HTid" />
+		</entity>
+
+	</document>
+</dataConfig>
