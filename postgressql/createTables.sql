@@ -1,3 +1,16 @@
+CREATE TABLE hashtag_picked
+(
+  hashtag character varying(45) NOT NULL,
+  count integer,
+  mean double precision,
+  sigma double precision,
+  date character varying(50) NOT NULL,
+  last_modified timestamp without time zone DEFAULT now(),
+  id serial NOT NULL,
+  CONSTRAINT pk_hashtag_picked PRIMARY KEY (hashtag, date)
+);
+
+
 CREATE TABLE hashtags
 (
   tweetid bigint NOT NULL,
@@ -22,7 +35,8 @@ CREATE TABLE tweet
   geo character varying(30) DEFAULT NULL::character varying,
   place character varying(100) DEFAULT NULL::character varying,
   retweetcount bigint NOT NULL DEFAULT 0::bigint,
-  userid bigint NOT NULL
+  userid bigint NOT NULL,
+  CONSTRAINT tweet_pkey PRIMARY KEY (tweetid)
 );
 
 
@@ -40,7 +54,8 @@ CREATE TABLE "user"
   screenname character varying(45) NOT NULL,
   url character varying(600) DEFAULT NULL::character varying,
   location character varying(30) DEFAULT NULL::character varying,
-  language character varying(45) DEFAULT NULL::character varying
+  language character varying(45) DEFAULT NULL::character varying,
+  CONSTRAINT user_pkey PRIMARY KEY (userid)
 );
 
 
@@ -50,17 +65,3 @@ CREATE TABLE user_mention
   userid bigint NOT NULL,
   screenname character varying(45) NOT NULL
 );
-
-
-CREATE TABLE hashtag_picked
-(
-  hashtag character varying(45) NOT NULL,
-  count integer,
-  mean double precision,
-  sigma double precision,
-  date character varying(50) NOT NULL,
-  last_modified timestamp without time zone DEFAULT now(),
-  id serial NOT NULL,
-  CONSTRAINT pk_hashtag_picked PRIMARY KEY (hashtag, date)
-);
-
