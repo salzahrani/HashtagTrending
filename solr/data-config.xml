@@ -1,73 +1,3 @@
-taConfig>
-	<dataSource name="mysql" encoding="UTF-8" type="JdbcDataSource" driver=
-"org.postgresql.Driver" url="jdbc:postgresql://127.0.0.1:5432/UKNew" user="postgres" 
-password="password" />
-	<document>
-		<!--entity name="tweets" pk="tweetid"
-		query="SELECT timestamp 'epoch' + time_created::bigint * interval '1 ms' AS date, 
-tweetid, u.user_id, message, loc FROM tweet t INNER JOIN userinfo u ON 
-t.user_id=u.user_id"
-		deltaImportQuery="SELECT timestamp 'epoch' + time_created::bigint * interval '1 ms' AS 
-date, tweetid, u.user_id, message, loc FROM tweet t INNER JOIN userinfo u ON 
-t.user_id=u.user_id WHERE t.tweetid='${dataimporter.delta.tweetid}'"
-		deltaQuery="SELECT tweetid FROM tweet WHERE last_modified &gt; 
-'${dataimporter.last_index_time}'"-->
-		<entity name="tweets" pk="tweetid"
-		query="SELECT tweetid,text,createdat from tweet">
-
-			<field column="tweetid" name="tweetid"/>
-			<field column="text" name="tweetcontents"/>
-			<field column="createdat" name="createdat"/>
-			<field column="geo" name="geo"/>
-			<field column="place" name="place"/>
-			<field column="retweetcount" name="retweetcount"/>
-			<field column="userid" name="useridtt"/>	
-
-
-			<entity name="hashtags" pk="tweetid" 
-			query="SELECT hashtag FROM hashtags WHERE tweetid='${tweets.tweetid}'"
-			parentDeltaQuery="SELECT tweetid FROM tweet WHERE tweetid='${hashtags.tweetid}'">
-				<field column="hashtag" name="hashtag" />
-				<field column="breaking" name="breaking" />
-				<entity name="hashtag_picked"  
-			query="SELECT * FROM hashtag_picked WHERE hashtag='${hashtags.hashtag}'"
-			parentDeltaQuery="SELECT hashtag FROM tweet WHERE tweetid='${hashtags.tweetid}'">
-					<field column="hashtag" name="hashtag" />
-					<field column="breaking" name="breaking" />
-
-				</entity>
-			</entity>			
-			<entity name="links" pk="tweetid" 
-
-			query="SELECT url FROM url WHERE tweetid='${tweets.tweetid}'"
-			parentDeltaQuery="SELECT tweetid FROM tweet WHERE tweetid='${links.tweetid}'">
-				<field column="url" name="url" />
-			</entity>
-
-			<entity name="retweets" pk="tweetid" 
-			query="SELECT uidfrom FROM retweet WHERE tweetid='${tweets.tweetid}'"
-			parentDeltaQuery="SELECT tweetid FROM tweet WHERE tweetid='${retweets.tweetid}'">
-				<field column="uidfrom" name="retweeted" />
-			</entity>
-
-
-			<entity name="mentions" pk="tweetid" 
-			query="SELECT userid FROM user_mention WHERE tweetid='${tweets.tweetid}'"
-			parentDeltaQuery="SELECT tweetid FROM tweet WHERE tweetid='${mentions.userid}'">
-				<field column="userid" name="uidto" />
-
-			</entity>
-			<entity name="users" pk="tweetid" 
-			query="SELECT * FROM user ">
-			</entity>
-
-		</entity>
-
-	</document>
-</dataConfig>
-
-
-<!--
 <dataConfig>
 	<dataSource name="mysql" encoding="UTF-8" type="JdbcDataSource" driver=
 "org.postgresql.Driver" url="jdbc:postgresql://127.0.0.1:5432/UKNew" user="postgres" 
@@ -83,53 +13,50 @@ t.user_id=u.user_id WHERE t.tweetid='${dataimporter.delta.tweetid}'"
 		deltaQuery="SELECT tweetid FROM tweet WHERE last_modified &gt; 
 '${dataimporter.last_index_time}'"-->
 		<entity name="tweets" pk="tweetid"
-		query="SELECT tweetid,text,createdat from tweet">
+		query="SELECT tweetid,text,date(createdat) AS createdat_1 ,geo,place,retweetcount,tweet.userid,name,screenname,url,
+		location,language from tweet,usertable
+		where tweet.userid=userTable.userid
+		">
 
 			<field column="tweetid" name="tweetid"/>
 			<field column="text" name="tweetcontents"/>
-			<field column="createdat" name="createdat"/>
+			<field column="createdat_1" name="tweetdate"/>
 			<field column="geo" name="geo"/>
 			<field column="place" name="place"/>
 			<field column="retweetcount" name="retweetcount"/>
 			<field column="userid" name="useridtt"/>	
-
+			<field column="name" name="username"/>				
+			<field column="screenname" name="screenname"/>				
+			<field column="url" name="urluser"/>
+			<field column="location" name="locationHT"/>
+			<field column="language" name="languageHT"/>
 
 			<entity name="hashtags" pk="tweetid" 
-			query="SELECT hashtag FROM hashtags WHERE tweetid='${tweets.tweetid}'"
-			parentDeltaQuery="SELECT tweetid FROM tweet WHERE tweetid='${hashtags.tweetid}'">
+			query="SELECT hashtag FROM hashtags WHERE tweetid='${tweets.tweetid}'">
 				<field column="hashtag" name="hashtag" />
 				<field column="breaking" name="breaking" />
 				<entity name="hashtag_picked"  
-			query="SELECT * FROM hashtag_picked WHERE hashtag='${hashtags.hashtag}'"
-			parentDeltaQuery="SELECT hashtag FROM tweet WHERE tweetid='${hashtags.tweetid}'">
-					<field column="hashtag" name="hashtag" />
+			query="SELECT * FROM hashtag_picked WHERE hashtag='${hashtags.hashtag}'">
 					<field column="breaking" name="breaking" />
-
 				</entity>
 			</entity>			
 			<entity name="links" pk="tweetid" 
 
-			query="SELECT url FROM url WHERE tweetid='${tweets.tweetid}'"
-			parentDeltaQuery="SELECT tweetid FROM tweet WHERE tweetid='${links.tweetid}'">
+			query="SELECT url FROM url WHERE tweetid='${tweets.tweetid}'">
 				<field column="url" name="url" />
 			</entity>
 
 			<entity name="retweets" pk="tweetid" 
-			query="SELECT uidfrom FROM retweet WHERE tweetid='${tweets.tweetid}'"
-			parentDeltaQuery="SELECT tweetid FROM tweet WHERE tweetid='${retweets.tweetid}'">
+			query="SELECT uidfrom FROM retweet WHERE tweetid='${tweets.tweetid}'">
 				<field column="uidfrom" name="retweeted" />
 			</entity>
 
 
 			<entity name="mentions" pk="tweetid" 
-			query="SELECT userid FROM user_mention WHERE tweetid='${tweets.tweetid}'"
-			parentDeltaQuery="SELECT tweetid FROM tweet WHERE tweetid='${mentions.userid}'">
+			query="SELECT userid FROM user_mention WHERE tweetid='${tweets.tweetid}'">
 				<field column="userid" name="uidto" />
+			</entity>
 
-			</entity>
-			<entity name="users" pk="tweetid" 
-			query="SELECT * FROM user ">
-			</entity>
 
 		</entity>
 

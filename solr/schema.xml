@@ -263,11 +263,14 @@
 		<!--For tweet table-->
 		<field name="tweetid" type="string" indexed="true" stored="true" />
 		<field name="tweetcontents" type="text_en" indexed="true" stored="true" />
-		<field name="createdat" type="string" indexed="true" stored="true" />
 		<field name="geo" type="string" indexed="true" stored="true" />
 		<field name="place" type="string" indexed="true" stored="true" />
 		<field name="retweetcount" type="string" indexed="true" stored="true" />
 		<field name="useridtt" type="string" indexed="true" stored="true" />
+		<field name="tweetdate" type="tdate" indexed="true" stored="true" />
+		
+		<!--field name="tweetdate"  datetimeformat="yyyy-MM-dd HH:mm:ss" 
+indexed="true" multivalued="false" stored='true' type="date"/-->
 
 		<!--For hashtags table-->
 		<field name="tweetidht" type="string" indexed="true" stored="true" />
@@ -291,7 +294,7 @@
 		<!--For user_mention  table-->
 		<field name="useridum" type="string" indexed="true" stored="true" />
 
-		<!--For user_mention  table-->
+		<!--For hashtag_picked  table-->
 		<field name="count" type="int" indexed="true" stored="true" />
 		<field name="mean" type="float" indexed="true" stored="true" />
 		<field name="sigma" type="float" indexed="true" stored="true" />
