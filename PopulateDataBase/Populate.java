@@ -533,7 +533,7 @@ public class Populate {
 					String tempStr5 = replaceInnerSingleQoute(str[5]);
 
 
-					String sql = "INSERT INTO \"user\" (userid,name,screenname,url,location" +
+					String sql = "INSERT INTO usertable (userid,name,screenname,url,location" +
 							",language) "
 							+ "VALUES ("+tempStr0+","+tempStr1+","+tempStr2+","+tempStr3+","+tempStr4+","+
 							tempStr5+");";
